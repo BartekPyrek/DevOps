@@ -24,7 +24,7 @@ pgClient.on('error', () => {
     console.log("Postgres not connected");
 })
 
-pgClient.query('CREATE TABLE IF NOT EXISTS matches (id SERIAL PRIMARY KEY, first_team TEXT, second_team TEXT, result TEXT)').catch( (err) => {
+pgClient.query('CREATE TABLE IF NOT EXISTS points (id SERIAL PRIMARY KEY, team TEXT, result INT)').catch( (err) => {
     console.log(err);
 })
 
@@ -32,7 +32,6 @@ pgClient.query('CREATE TABLE IF NOT EXISTS matches (id SERIAL PRIMARY KEY, first
 const redisClient = redis.createClient({
     host: keys.redisHost,
     port: keys.redisPort
-    // retry_strategy: () => 1000
 });
 
 redisClient.on('connect', () => {
@@ -48,13 +47,15 @@ app.listen(PORT, () => {
 })
 
 app.get('/', (request, response) => {
-    response.status(200).send("OK");
+    response.status(200).send("Backend OK");
   });
 
-// Get all matches
+// Get all teams prediction
 
-app.get('/matches', (request, response) => {
-    pgClient.query('SELECT * FROM matches;', (pgError, queryResult) => {
+app.get('/teams', (request, response) => {
+    console.log(`Executed endpoint /teams. Get all teams point prediction.`);
+
+    pgClient.query('SELECT * FROM points;', (pgError, queryResult) => {
         if (!queryResult.rows){
             response.json([]);
         }
@@ -64,12 +65,13 @@ app.get('/matches', (request, response) => {
     });
 })
 
-// Get match by id
+// Get team points prediction by id
 
-app.get('/matches/:id', (request, response) => {
+app.get('/team/:id', (request, response) => {
     const id = request.params.id;
+    console.log(`Executed endpoint /team/${id}. Get team points prediction by id.`);
 
-    pgClient.query('SELECT * FROM matches WHERE id = $1;', [id], (pgError, queryResult) => {
+    pgClient.query('SELECT * FROM points WHERE id = $1;', [id], (pgError, queryResult) => {
         if (!queryResult.rows){
             response.json([]);
         }
@@ -79,33 +81,32 @@ app.get('/matches/:id', (request, response) => {
     });
 })
 
-// Post match result for team 1 and team 2
-app.get('/:team1,:team2', (request, response) =>{
-    const team1 = request.params.team1;
-    const team2 = request.params.team2;
-    const result = generateResult();
+// Post team point prediction
+app.post('/addTeam', (request, response) =>{
+    console.log('Executed enpoint /addTeam. Predict points number for ' + request.body.team);
+    const team = request.body.team;
+    const points = request.body.team;
 
-    redisClient.get(result, (err, cachedResult) => {
-        if (!cachedResult){
-            const computedResult = generateResult();
+    redisClient.get(points, (err, cachedResult) => {
+        if (cachedResult == null || cachedResult == undefined){
+            cachedResult = generateResult();
+            redisClient.set(points, parseInt(cachedResult));
             pgClient
-            .query('INSERT INTO matches (first_team, second_team, result) VALUES ($1, $2, $3)', [team1, team2, computedResult])
+            .query('INSERT INTO points (team, result) VALUES ($1, $2)', [team, cachedResult])
             .catch(pgError => console.log(pgError));
-            response.status(200).send(`Match result: ${team1} vs. ${team2} -> ${computedResult}  (computed now)`)
+            response.status(200).send(`End season points prediction: ${team} -> ${cachedResult}  (computed now)`)
         }
         else{
-            response.status(200).send(`Match result: ${team1} vs. ${team2} -> ${cachedResult}  (from cache)`)
+            response.status(200).send(`End season points prediction: ${team} -> ${cachedResult}  (from cache)`)
         }
     });
 });
 
-// Generate match results
+// Generate team points prediction
 
 const generateResult = () => {
-    x = getRandomInt(0,5);
-    y = getRandomInt(0,5);
-
-    return `${x}:${y}`
+    x = getRandomInt(0,100);
+    return x
 }
 
 function getRandomInt(min, max) {
@@ -113,5 +114,3 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
   }
-
-// TODO: check if teams and result is not the same
