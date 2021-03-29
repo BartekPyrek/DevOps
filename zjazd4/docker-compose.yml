@@ -1,0 +1,27 @@
+version: '3'
+
+services: 
+  myredis:
+    image: 'redis:alpine'
+  mypostgres:
+    image: 'postgres:alpine'
+    environment: 
+      - POSTGRES_PASSWORD=Pa55w.rd1234
+    volumes: 
+      - ./postgresdata:/var/lib/postgresql/data
+  mybackend:
+    build: 
+      # .dev -> środowisko deweloperskie, bez rozszerzenia -> środowisko produkcyjne
+      dockerfile: Dockerfile.dev
+      context: ./mybackend
+    volumes: 
+      - /opt/app/node_modules
+      - ./mybackend:/opt/app
+    environment: 
+      - POSTGRES_PASSWORD=Pa55w.rd1234
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - REDIS_HOST=myredis
+      - POSTGRES_HOST=mypostgres
+    ports: 
+      - "5000:5000"
