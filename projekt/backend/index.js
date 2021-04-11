@@ -111,7 +111,7 @@ app.post('/addTeam', (request, response) =>{
     pgClient
     .query('INSERT INTO pointsTeam (id, team, result) VALUES ($1, $2, $3)', [Id, team, points])
     .catch(pgError => console.log(pgError));
-    response.status(200).send(`End season points prediction: ${team} -> ${points}`);
+    response.status(201).send(`End season points prediction: ${team} -> ${points}`);
 });
 
 // Generate team points prediction
