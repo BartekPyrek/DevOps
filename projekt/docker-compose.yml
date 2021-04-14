@@ -31,3 +31,18 @@ services:
         depends_on: 
             - myredis
             - mypostgres
+
+    myfrontend:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./frontend
+        volumes:
+            - /opt/app/node_modules
+            - ./frontend:/opt/app
+        tty: true
+        ports:
+        -   '3000:3000'
+        depends_on:
+            -   mybackend
+            -   mypostgres
+            -   myredis
