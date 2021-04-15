@@ -11,7 +11,7 @@ const UpdateTeam = (props) => {
 
     const handleUpdate = (event) => {
         setTeamId(event.target.value);
-        axios.put(`http://localhost:9090/updateTeam/${teamId}`, {
+        axios.put(`http://localhost:9090/team/${teamId}`, {
             team: teamName,
             result: teamResult
         })
@@ -30,7 +30,6 @@ const UpdateTeam = (props) => {
                     <input type='text' value={teamResult} onChange={event => setTeamResult(event.target.value)}/><br/>
                     <input type='submit' value='Zaktualizuj zespół' onClick={handleUpdate}/>
                 </form>
-
             </div>
         </>
     );

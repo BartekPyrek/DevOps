@@ -10,7 +10,7 @@ const ShowTeams = (props) => {
 
 
     const handleShowResult = (event) => {
-        axios.get('http://localhost:9090/teams')
+        axios.get('http://localhost:9090/team')
             .then(response => setTeams(response.data))
             .catch(error => console.log(error));
 
@@ -38,6 +38,7 @@ const ShowTeams = (props) => {
             <div className="Div-element">
                 <form>
                     <button onClick={handleShowResult}>Pokaż dotychczasowe wyniki</button>
+                    <button onClick={handleShowResult}><i className="fa fa-refresh"/></button>
                     <br/>
                     {teams
                         .sort((a, b) => a.team.localeCompare(b.team))
@@ -49,14 +50,14 @@ const ShowTeams = (props) => {
 
             <div className="Div-element">
                 <form>
-                    Wyszukaj zespół po ID<br/>
                     <input type='text' defaultValue={''} value={teamId}
                            onChange={event => setTeamId(event.target.value)} onKeyDown={handleKeyDown}/><br/>
                     {
                         teams
                             .map(team => team.id === teamId ? <div key={team.id}>{team.team} | {team.result}</div> :
-                                <div key={teamId}></div>)
+                                <div key={teamId}/>)
                     }
+                    <button>Wyszukaj zespół po ID</button>
                 </form>
             </div>
         </>

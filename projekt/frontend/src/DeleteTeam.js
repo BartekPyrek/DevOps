@@ -9,7 +9,7 @@ const DeleteTeam = (props) => {
 
     const handleDeleteTeam = (event) => {
         setTeamId(event.target.value);
-        axios.delete(`http://localhost:9090/deleteTeam/${teamId}`)
+        axios.delete(`http://localhost:9090/team/${teamId}`)
             .then(response => response.data)
             .catch(error => console.log(error))
 

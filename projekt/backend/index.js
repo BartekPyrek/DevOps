@@ -53,8 +53,8 @@ app.get('/', (request, response) => {
 
 // Get all teams prediction
 
-app.get('/teams', (request, response) => {
-    console.log(`Executed endpoint /teams. Get all teams point prediction.`);
+app.get('/team', (request, response) => {
+    console.log(`Executed endpoint GET /team. Get all teams point prediction.`);
 
     pgClient.query('SELECT * FROM pointsTeam;', (pgError, queryResult) => {
         if (!queryResult.rows) {
@@ -77,7 +77,7 @@ app.get('/team/:id', (request, response) => {
                     console.log(err)
                 } else {
                     const data = responseRedis;
-                    console.log(`Executed endpoint /team/${id}. Get team points prediction by id. Retrieved from cache: ${data.team}`);
+                    console.log(`Executed endpoint GET /team/${id}. Get team points prediction by id. Retrieved from cache: ${data.team}`);
                     response.status(200).send(responseRedis);
                 }
             });
@@ -88,7 +88,7 @@ app.get('/team/:id', (request, response) => {
                     response.status(404).send("No data found in postgres database")
                 } else {
                     const data = queryResult.rows[0];
-                    console.log(`Executed endpoint /team/${id}. Get team points prediction by id. Retrieved from database ${data.team}`);
+                    console.log(`Executed endpoint GET /team/${id}. Get team points prediction by id. Retrieved from database ${data.team}`);
                     response.status(200).json(queryResult.rows[0]);
                 }
             });
@@ -97,8 +97,8 @@ app.get('/team/:id', (request, response) => {
 })
 
 // Post team point prediction
-app.post('/addTeam', (request, response) => {
-    console.log('Executed endpoint /addTeam. Predict points number for ' + request.body.team);
+app.post('/team', (request, response) => {
+    console.log('Executed endpoint POST /team. Predict points number for ' + request.body.team);
     const Id = uuidv4();
     const team = request.body.team;
     const points = generateResult();
@@ -112,9 +112,9 @@ app.post('/addTeam', (request, response) => {
 
 
 // Delete team from database
-app.delete('/deleteTeam/:id', (request, response) => {
+app.delete('/team/:id', (request, response) => {
     const id = request.params.id;
-    console.log(`Executed endpoint /deleteTeam. Removed data of team with id ${id}`);
+    console.log(`Executed endpoint DELETE /team. Removed data of team with id ${id}`);
 
     pgClient
         .query('DELETE FROM pointsTeam WHERE id = $1', [id])
@@ -123,10 +123,10 @@ app.delete('/deleteTeam/:id', (request, response) => {
 });
 
 // Update team data
-app.put('/updateTeam/:id', (request, response) => {
+app.put('/team/:id', (request, response) => {
     const id = request.params.id;
     const {team, result} = request.body;
-    console.log(`Executed endpoint /updateTeam. Update data of team with id ${id}. New provided data: ${team}, ${result}`);
+    console.log(`Executed endpoint PUT /team. Update data of team with id ${id}. New provided data: ${team}, ${result}`);
 
     pgClient
         .query('UPDATE pointsTeam SET team = $1, result = $2 WHERE id = $3', [team, result, id])
