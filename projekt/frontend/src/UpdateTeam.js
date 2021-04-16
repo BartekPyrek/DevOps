@@ -25,9 +25,9 @@ const UpdateTeam = (props) => {
         <>
             <div className='Div-element'>
                 <form>
-                    <input type='text' value={teamId} onChange={event => setTeamId(event.target.value)}/><br/>
-                    <input type='text' value={teamName} onChange={event => setTeamName(event.target.value)}/><br/>
-                    <input type='text' value={teamResult} onChange={event => setTeamResult(event.target.value)}/><br/>
+                    ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' value={teamId} onChange={event => setTeamId(event.target.value)}/><br/>
+                    Name: <input type='text' value={teamName} onChange={event => setTeamName(event.target.value)}/><br/>
+                    Result: <input type='text' value={teamResult} onChange={event => setTeamResult(event.target.value)}/><br/>
                     <input type='submit' value='Zaktualizuj zespół' onClick={handleUpdate}/>
                 </form>
             </div>
