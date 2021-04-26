@@ -11,7 +11,7 @@ const UpdateTeam = (props) => {
 
     const handleUpdate = (event) => {
         setTeamId(event.target.value);
-        axios.put(`http://localhost:9090/team/${teamId}`, {
+        axios.put(`/api/team/${teamId}`, {
             team: teamName,
             result: teamResult
         })

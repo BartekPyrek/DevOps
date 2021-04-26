@@ -10,7 +10,7 @@ const ShowTeams = (props) => {
 
 
     const handleShowResult = (event) => {
-        axios.get('http://localhost:9090/team')
+        axios.get('/api/team')
             .then(response => setTeams(response.data))
             .catch(error => console.log(error));
 
@@ -19,7 +19,7 @@ const ShowTeams = (props) => {
 
     const handleShowTeam = (event) => {
         setTeamId(event.target.value);
-        axios.get(`http://localhost:9090/team/${teamId}`
+        axios.get(`/api/team/${teamId}`
         )
             .then(response => response.data)
             .catch(error => console.log(error));
@@ -52,12 +52,12 @@ const ShowTeams = (props) => {
                 <form>
                     <input type='text' defaultValue={''} value={teamId}
                            onChange={event => setTeamId(event.target.value)} onKeyDown={handleKeyDown}/><br/>
+                    <button>Wyszukaj zespół po ID</button>
                     {
                         teams
                             .map(team => team.id === teamId ? <div key={team.id}>{team.team} | {team.result}</div> :
                                 <div key={teamId}/>)
                     }
-                    <button>Wyszukaj zespół po ID</button>
                 </form>
             </div>
         </>

@@ -3,7 +3,7 @@ const express = require("express");
 const {v4: uuidv4} = require('uuid');
 const cors = require("cors");
 const redis = require("redis");
-const PORT = 9090;
+const PORT = 4000;
 
 // Create express app
 const app = express();

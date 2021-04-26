@@ -8,7 +8,7 @@ const AddTeam = (props) => {
     const [teamName, setTeamName] = useState("");
 
     const handleSubmitTeam = (event) => {
-        axios.post('http://localhost:9090/team', {
+        axios.post('/api/team', {
             team: teamName
         })
             .then(response => console.log(response))
