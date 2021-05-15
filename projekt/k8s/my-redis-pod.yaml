@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: myredis-pod
+  labels:
+    component: web
+    app: myapp
+
+spec:
+  containers:
+    - name: myredis
+      image: redis:alpine
+      ports:
+        - containerPort: 80
