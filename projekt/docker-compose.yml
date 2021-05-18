@@ -24,9 +24,8 @@ services:
             dockerfile: Dockerfile.dev
             context: ./backend
         volumes:
-            - "/opt/app/node_modules"
-        ports:
-            - '4000:4000'
+            - /opt/app/node_modules
+            - ./backend:/opt/app
         environment: 
             - REDIS_HOST=myredis
             - REDIS_PORT=6379
@@ -45,9 +44,8 @@ services:
             dockerfile: Dockerfile.dev
             context: ./frontend
         volumes:
-            - "/opt/app/node_modules"
-        environment:
-            CHOKIDAR_USEPOLLING: "true"
+            - /opt/app/node_modules
+            - ./frontend:/opt/app
         tty: true
         depends_on:
             - mypostgres
