@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: my-frontend-deployment
+  namespace: app
+  labels:
+    component: frontend
+    app: myapp
+
+spec:
+  template:
+    metadata:
+      name: my-frontend-pod
+      namespace: app
+      labels:
+        component: frontend
+        app: myapp
+
+    spec:
+      containers:
+        - name: my-frontend-container
+          image: barpyr/myfrontend:latest
+  replicas: 1
+  selector:
+    matchLabels:
+      component: frontend
+      app: myapp

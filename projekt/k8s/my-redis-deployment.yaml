@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: my-redis-deployment
+  namespace: app
+  labels:
+    component: redis
+    app: myapp
+
+spec:
+  template:
+    metadata:
+      name: my-redis-pod
+      namespace: app
+      labels:
+        component: redis
+        app: myapp
+    spec:
+      containers:
+        - name: my-redis-container
+          image: redis:alpine
+  replicas: 1
+  selector:
+    matchLabels:
+      component: redis
+      app: myapp

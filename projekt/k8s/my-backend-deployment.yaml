@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: my-backend-deployment
+  namespace: app
+  labels:
+    component: backend
+    app: myapp
+
+spec:
+  template:
+    metadata:
+      name: my-backend-pod
+      namespace: app
+      labels:
+        component: backend
+        app: myapp
+
+    spec:
+      containers:
+        - name: my-backend-container
+          image: barpyr/mybackend:latest
+  replicas: 1
+  selector:
+    matchLabels:
+      component: backend
+      app: myapp
