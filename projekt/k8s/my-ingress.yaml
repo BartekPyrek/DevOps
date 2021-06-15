@@ -11,7 +11,7 @@ metadata:
 
 spec:
   rules:
-    - host: localhost
+    - host: localapp
       http:
         paths:
           - path: /api/?(.*)
