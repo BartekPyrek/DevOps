@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: my-backend-container
-          image: barpyr/mybackend:latest
+          image: barpyr/mybackend:v1.1
 
           env:
             - name: PGPASSWORD
@@ -28,9 +28,24 @@ spec:
                 secretKeyRef:
                   key: PGPASSWORD
                   name: my-postgres-secret
-          envFrom:
-            - configMapRef:
-                name: my-app-configmap
+
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-configmap
+                  key: PGDATABASE
+
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-configmap
+                  key: PGUSER
+
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-configmap
+                  key: PGHOST
   replicas: 1
   selector:
     matchLabels:

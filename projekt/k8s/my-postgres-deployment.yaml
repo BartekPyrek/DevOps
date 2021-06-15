@@ -19,22 +19,22 @@ spec:
     spec:
       containers:
         - name: my-postgres-container
-          image: postgres:alpine
+          image: bitnami/postgresql
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               subPath: postgres
               name: postgresvolume
           env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: PGPASSWORD
-                  name: my-postgres-secret
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
                   key: PGUSER
                   name: my-app-configmap
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PGPASSWORD
+                  name: my-postgres-secret
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:

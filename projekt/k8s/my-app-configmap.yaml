@@ -10,9 +10,9 @@ metadata:
 
 data:
   PGUSER: "postgres"
-  PGHOST: "my-postgres-service"
+  PGHOST: "mypostgres"
   PGPORT: "5432"
   PGDATABASE: "postgres"
-  REDIS_HOST: "my-redis-service"
+  REDIS_HOST: "myredis"
   REDIS_PORT: "6379"
   BACKEND_PORT: "5000"
